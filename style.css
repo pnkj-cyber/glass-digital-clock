@@ -1,0 +1,374 @@
+@import url('https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;600&display=swap');
+
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    background: linear-gradient(-45deg, #eedfff, #fceeff, #eaddfc, #fff0f5);
+    background-size: 400% 400%;
+    animation: gradientBG 15s ease infinite;
+    min-height: 100vh;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    font-family: 'Outfit', sans-serif;
+    overflow: hidden;
+    position: relative;
+    user-select: none;
+}
+
+/* Background Aesthetics */
+.bg-shape {
+    position: absolute;
+    border-radius: 50%;
+    filter: blur(80px);
+    z-index: 0;
+    animation: drift 20s infinite alternate linear;
+}
+
+.shape1 {
+    width: 400px;
+    height: 400px;
+    background: rgba(181, 137, 255, 0.5);
+    top: -100px;
+    left: 10%;
+}
+
+.shape2 {
+    width: 500px;
+    height: 500px;
+    background: rgba(255, 175, 189, 0.5);
+    bottom: -150px;
+    right: 5%;
+    animation-delay: -5s;
+}
+
+@keyframes drift {
+    0% { transform: translate(0, 0) scale(1); }
+    33% { transform: translate(40px, -60px) scale(1.1); }
+    66% { transform: translate(-30px, 40px) scale(0.9); }
+    100% { transform: translate(0, 0) scale(1); }
+}
+
+@keyframes gradientBG {
+    0% { background-position: 0% 50%; }
+    50% { background-position: 100% 50%; }
+    100% { background-position: 0% 50%; }
+}
+
+
+
+/* Main Clock Container */
+.clock-container {
+    position: relative;
+    width: 600px;
+    height: 600px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 5;
+    /* 3D Transform rules */
+    transform-style: preserve-3d;
+    perspective: 1000px;
+}
+
+/* SVG Clock Rings */
+.clock-svg {
+    position: absolute;
+    transform: rotate(-90deg) translateZ(20px);
+    width: 500px;
+    height: 500px;
+    filter: drop-shadow(0 15px 35px rgba(0, 0, 0, 0.15));
+    transition: transform 0.1s ease-out;
+}
+
+.clock-svg circle {
+    fill: none;
+}
+
+.track {
+    stroke: rgba(255, 255, 255, 0.3);
+}
+
+.ring {
+    transition: stroke-dashoffset 0.5s linear;
+    transform-origin: 250px 250px;
+}
+
+/* Center Alarm/Clock Button */
+.center-button {
+    width: 120px;
+    height: 120px;
+    background: linear-gradient(135deg, #442a73, #2a164e);
+    border-radius: 50%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    box-shadow: 
+        0 15px 35px rgba(0,0,0,0.3),
+        inset 0 2px 10px rgba(255,255,255,0.2),
+        inset 0 -5px 15px rgba(0,0,0,0.4);
+    z-index: 10;
+    transform: translateZ(50px);
+    position: relative;
+    cursor: pointer;
+    transition: transform 0.2s;
+}
+.center-button:active {
+    transform: translateZ(30px) scale(0.95);
+}
+
+.center-button::after {
+    content: '';
+    position: absolute;
+    inset: -6px;
+    border-radius: 50%;
+    /* Subtle outer glow on the dark button */
+    border: 1px solid rgba(255,255,255,0.2);
+    pointer-events: none;
+}
+
+/* Glassmorphism Labels */
+.glass-label {
+    position: absolute;
+    background: rgba(255, 255, 255, 0.3);
+    backdrop-filter: blur(15px);
+    -webkit-backdrop-filter: blur(15px);
+    border: 1px solid rgba(255, 255, 255, 0.5);
+    border-radius: 20px;
+    padding: 8px 16px;
+    color: #4a3672;
+    font-weight: 600;
+    font-size: 1rem;
+    box-shadow: 0 8px 32px rgba(31, 38, 135, 0.1);
+    letter-spacing: 0.5px;
+    transform: translateZ(30px);
+    transition: all 0.3s ease;
+}
+
+/* Placement of labels to match the vibe */
+.label-time {
+    top: 15%;
+    left: 10%;
+    font-size: 1.2rem;
+}
+
+.label-date {
+    bottom: 12%;
+    left: 20%;
+}
+
+.label-ampm {
+    bottom: 25%;
+    right: 15%;
+    font-size: 1.1rem;
+}
+
+.label-seconds {
+    top: 25%;
+    right: 8%;
+    font-size: 1.2rem;
+    color: #8a2387;
+}
+
+/* Add some hover effects to the container implicitly */
+.clock-container:hover .glass-label {
+    background: rgba(255, 255, 255, 0.5);
+    box-shadow: 0 8px 32px rgba(31, 38, 135, 0.2);
+}
+
+/* Modifiers for Icons */
+.btn-icon {
+    display: none;
+}
+.btn-icon.active {
+    display: block;
+}
+
+/* Top Mode Toggle */
+.mode-toggle {
+    top: 5%;
+    left: 50%;
+    transform: translateX(-50%) translateZ(40px);
+    display: flex;
+    gap: 10px;
+    padding: 5px;
+    border-radius: 30px;
+    z-index: 20;
+    pointer-events: auto;
+}
+
+.mode-btn {
+    background: transparent;
+    border: none;
+    padding: 8px 16px;
+    border-radius: 20px;
+    color: #4a3672;
+    font-family: inherit;
+    font-weight: 600;
+    cursor: pointer;
+    transition: background 0.3s;
+}
+
+.mode-btn.active {
+    background: rgba(255, 255, 255, 0.6);
+    box-shadow: 0 2px 10px rgba(0,0,0,0.05);
+}
+
+/* Reset Button */
+.action-btn {
+    bottom: 5%;
+    left: 50%;
+    transform: translateX(-50%) translateZ(40px);
+    cursor: pointer;
+    background: rgba(255, 120, 120, 0.2);
+    border: 1px solid rgba(255, 120, 120, 0.5);
+    z-index: 20;
+    color: #cc3b3b;
+    display: none;
+    pointer-events: auto;
+}
+.action-btn.active {
+    display: block;
+}
+
+/* Sidebar & Modern Form Elements */
+.sidebar {
+    position: absolute;
+    top: 50px;
+    right: 30px;
+    width: 280px;
+    transform: none; /* override translateZ */
+    display: flex;
+    flex-direction: column;
+    pointer-events: auto;
+    background: rgba(255, 255, 255, 0.4);
+    z-index: 100;
+}
+
+.modern-input {
+    background: rgba(255,255,255,0.4); 
+    border: 1px solid rgba(255,255,255,0.6); 
+    color: #4a3672; 
+    padding: 8px 12px; 
+    border-radius: 10px; 
+    font-family: inherit; 
+    font-size: 1rem; 
+    outline: none; 
+    cursor: pointer;
+}
+
+.modern-btn {
+    background: rgba(138, 35, 135, 0.2); 
+    border: 1px solid rgba(138, 35, 135, 0.4); 
+    color: #8a2387; 
+    padding: 8px 15px; 
+    border-radius: 12px; 
+    cursor: pointer; 
+    font-weight: bold; 
+    width: 100%;
+    transition: background 0.3s;
+}
+
+.modern-btn:hover {
+    background: rgba(138, 35, 135, 0.3);
+}
+
+.alarm-item {
+    background: rgba(255,255,255,0.3);
+    padding: 10px 15px;
+    border-radius: 10px;
+    border: 1px solid rgba(255,255,255,0.5);
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    color: #4a3672;
+    font-weight: 500;
+    font-size: 1.1rem;
+}
+.alarm-item-remove {
+    background: rgba(204, 59, 59, 0.2);
+    border: none;
+    color: #cc3b3b;
+    border-radius: 8px;
+    padding: 5px 10px;
+    cursor: pointer;
+    font-size: 0.9rem;
+    font-weight: bold;
+    transition: background 0.3s;
+}
+.alarm-item-remove:hover {
+    background: rgba(204, 59, 59, 0.4);
+}
+
+/* Header Info Section */
+.header-info {
+    position: absolute;
+    top: 50px;
+    left: 40px;
+    max-width: 320px;
+    padding: 25px;
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+    z-index: 20;
+    pointer-events: auto;
+    transform: none; /* overrides glass-label default translateZ */
+}
+
+.header-info h1 {
+    font-size: 1.8rem;
+    color: #4a3672;
+    margin-bottom: 5px;
+}
+
+.header-info .desc {
+    font-size: 1rem;
+    color: #4a3672;
+    line-height: 1.4;
+    font-weight: 400;
+}
+
+.header-info .caption {
+    font-size: 0.9rem;
+    color: #8a2387;
+    font-style: italic;
+    font-weight: 500;
+}
+
+.header-info .author-text {
+    font-weight: 800;
+    font-family: 'Verdana', sans-serif;
+    font-style: normal;
+    color: #4a3672;
+    text-transform: uppercase;
+    letter-spacing: 1.5px;
+    font-size: 1rem;
+    margin-top: -5px;
+}
+
+.header-info .hashtags {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+    margin-top: 5px;
+}
+
+.header-info .hashtags span {
+    background: rgba(138, 35, 135, 0.15);
+    color: #8a2387;
+    padding: 5px 12px;
+    border-radius: 12px;
+    font-size: 0.8rem;
+    font-weight: 700;
+    border: 1px solid rgba(138, 35, 135, 0.3);
+}
+
+/* General hidden util */
+.hidden {
+    opacity: 0 !important;
+    pointer-events: none !important;
+}

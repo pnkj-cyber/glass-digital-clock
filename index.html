@@ -1,0 +1,191 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Glassmorphism Digital Clock</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+
+<body>
+    <!-- Project Info (Heading, Description, Caption, Hashtags) -->
+    <div class="glass-label header-info">
+        <h1>Digital Clock 🤖</h1>
+        <p class="desc">A beautiful 3D glassmorphism digital experience featuring interactive alarms and a stopwatch.
+        </p>
+        <p class="caption">Designed to inspire your workflow.</p>
+        <p class="caption author-text">By Pankaj buildUp.🚀</p>
+        <div class="hashtags">
+            <span>#DigitalClock⌚</span>
+            <span>#Glassmorphism</span>
+            <span>#WebDesign</span>
+            <span>#UI</span>
+            <span>DailyBuildup</span>
+            <span>#Hello Coder's</span>
+            <span>#2026</span>
+        </div>
+    </div>
+
+
+    <div class="clock-container" id="clock-container">
+        <!-- SVG for the ring arcs -->
+        <svg class="clock-svg" width="500" height="500" viewBox="0 0 500 500">
+            <defs>
+                <linearGradient id="gradSec" x1="0%" y1="0%" x2="100%" y2="100%">
+                    <stop offset="0%" stop-color="#df8a8a" />
+                    <stop offset="100%" stop-color="#8a2387" />
+                </linearGradient>
+                <linearGradient id="gradMin" x1="0%" y1="0%" x2="100%" y2="0%">
+                    <stop offset="0%" stop-color="#6b30c3" />
+                    <stop offset="100%" stop-color="#b671ff" />
+                </linearGradient>
+                <linearGradient id="gradHour" x1="0%" y1="100%" x2="100%" y2="0%">
+                    <stop offset="0%" stop-color="#ffafbd" />
+                    <stop offset="100%" stop-color="#b984ff" />
+                </linearGradient>
+
+                <filter id="shadow">
+                    <feDropShadow dx="2" dy="5" stdDeviation="5" flood-color="#000" flood-opacity="0.2" />
+                </filter>
+            </defs>
+
+            <!-- Background Tracks (subtle white rings) -->
+            <circle cx="250" cy="250" r="220" class="track" stroke-width="4" />
+            <circle cx="250" cy="250" r="160" class="track" stroke-width="80" />
+            <circle cx="250" cy="250" r="100" class="track" stroke-width="40" />
+
+            <!-- Progress rings -->
+            <circle id="sec-ring" class="ring sec-ring" cx="250" cy="250" r="220" stroke="url(#gradSec)"
+                stroke-width="6" stroke-linecap="round" />
+            <circle id="min-ring" class="ring min-ring" cx="250" cy="250" r="160" stroke="url(#gradMin)"
+                stroke-width="80" />
+            <circle id="hour-ring" class="ring hour-ring" cx="250" cy="250" r="100" stroke="url(#gradHour)"
+                stroke-width="40" />
+        </svg>
+
+        <!-- Central Button -->
+        <div class="center-button" id="center-btn">
+            <!-- Clock Icon -->
+            <svg id="icon-clock" width="50" height="50" viewBox="0 0 24 24" fill="none" class="btn-icon active"
+                stroke="#ffffff" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+                <circle cx="12" cy="13" r="8"></circle>
+                <path d="M12 9v4l2 2"></path>
+                <path d="M5 3L2 6M19 3l3 3"></path>
+            </svg>
+            <!-- Play Icon -->
+            <svg id="icon-play" width="50" height="50" viewBox="0 0 24 24" fill="none" class="btn-icon" stroke="#ffffff"
+                stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+                <polygon points="5 3 19 12 5 21 5 3"></polygon>
+            </svg>
+            <!-- Pause Icon -->
+            <svg id="icon-pause" width="50" height="50" viewBox="0 0 24 24" fill="none" class="btn-icon"
+                stroke="#ffffff" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+                <rect x="6" y="4" width="4" height="16"></rect>
+                <rect x="14" y="4" width="4" height="16"></rect>
+            </svg>
+            <!-- Bell Icon -->
+            <svg id="icon-bell" width="50" height="50" viewBox="0 0 24 24" fill="none" class="btn-icon" stroke="#ffffff"
+                stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+                <path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9"></path>
+                <path d="M13.73 21a2 2 0 0 1-3.46 0"></path>
+            </svg>
+        </div>
+
+        <!-- Mode Toggle & Action Buttons -->
+        <div class="glass-label mode-toggle">
+            <button id="btn-mode-clock" class="mode-btn active">Clock</button>
+            <button id="btn-mode-alarm" class="mode-btn">Alarm</button>
+            <button id="btn-mode-stopwatch" class="mode-btn">Stopwatch</button>
+        </div>
+
+        <button id="btn-reset" class="glass-label action-btn">Reset</button>
+
+        <!-- Floating Glass Labels -->
+        <div class="glass-label label-time" id="label-time">12:00:00</div>
+        <div class="glass-label label-date" id="label-date">Mon, 1 Jan</div>
+        <div class="glass-label label-ampm" id="label-ampm">AM</div>
+        <div class="glass-label label-seconds" id="label-seconds">00s</div>
+    </div>
+
+    <!-- Additional background aesthetic elements -->
+    <div class="bg-shape shape1"></div>
+    <div class="bg-shape shape2"></div>
+
+    <!-- Alarm Sidebar UI Configuration -->
+    <div id="alarm-ui" class="glass-label hidden sidebar">
+        <h3
+            style="margin-bottom: 15px; color: #4a3672; text-align: center; border-bottom: 1px solid rgba(255,255,255,0.4); padding-bottom: 10px;">
+            Alarms</h3>
+        <div style="display: flex; flex-direction: column; gap: 10px; margin-bottom: 15px;">
+            <input type="time" id="alarm-time-input" class="modern-input" />
+            <div style="display: flex; gap: 10px;">
+                <select id="alarm-music-select" class="modern-input" style="flex: 1;">
+                    <option value="https://assets.mixkit.co/active_storage/sfx/995/995-preview.mp3">Digital Beep
+                    </option>
+                    <option value="https://assets.mixkit.co/active_storage/sfx/1004/1004-preview.mp3">Classic Ring
+                    </option>
+                    <option value="https://assets.mixkit.co/active_storage/sfx/1005/1005-preview.mp3">Buzzer</option>
+                    <option value="https://assets.mixkit.co/active_storage/sfx/993/993-preview.mp3">Digital Watch Alarm
+                    </option>
+                    <option value="https://assets.mixkit.co/active_storage/sfx/1010/1010-preview.mp3">Sci-Fi Alarm
+                    </option>
+                    <option value="https://assets.mixkit.co/active_storage/sfx/1011/1011-preview.mp3">Retro Beep
+                    </option>
+                    <option value="https://assets.mixkit.co/active_storage/sfx/999/999-preview.mp3">Fast Beep</option>
+                    <option value="https://assets.mixkit.co/active_storage/sfx/1000/1000-preview.mp3">Alien Alarm
+                    </option>
+                    <option value="https://assets.mixkit.co/active_storage/sfx/1001/1001-preview.mp3">Machine Beep
+                    </option>
+                    <option value="https://assets.mixkit.co/active_storage/sfx/1002/1002-preview.mp3">Radar Beep
+                    </option>
+                </select>
+                <button id="btn-preview-sound" class="modern-btn" style="width: auto; padding: 8px 10px;"
+                    title="Preview/Stop Sound">▶</button>
+            </div>
+            <button id="btn-set-alarm" class="modern-btn">Add Alarm</button>
+        </div>
+        <div id="alarms-list"
+            style="display: flex; flex-direction: column; gap: 8px; max-height: 250px; overflow-y: auto;">
+            <!-- Alarm items going here -->
+        </div>
+    </div>
+
+    <!-- Alarm Ringing Overlay (Minimized) -->
+    <div id="alarm-ringing-overlay" class="hidden glass-label"
+        style="position: absolute; top: auto; bottom: 50px; left: 40px; right: auto; z-index: 100; display: flex; flex-direction: row; justify-content: center; align-items: center; gap: 25px; animation: pulse-bg 1s infinite alternate; pointer-events: auto; padding: 15px 30px; box-shadow: 0 10px 30px rgba(204,59,59,0.3); border: 1px solid rgba(255,0,0,0.3); transform: translateZ(50px);">
+        <h1 style="font-size: 1.5rem; color: #cc3b3b; margin: 0; font-weight: 700; font-family: 'Outfit', sans-serif; white-space: nowrap; animation: pulse-text 0.5s infinite alternate;">
+            ⏰ ALARM RINGING!</h1>
+        <button id="btn-stop-alarm" class="modern-btn"
+            style="width: auto; padding: 8px 20px; font-size: 1.1rem; background: rgba(204,59,59,0.15); color: #cc3b3b; border: 1px solid rgba(204,59,59,0.4); box-shadow: 0 4px 15px rgba(204,59,59,0.2);">Stop</button>
+        <audio id="alarm-audio" loop crossorigin="anonymous">
+            <source src="https://assets.mixkit.co/active_storage/sfx/995/995-preview.mp3" type="audio/mpeg">
+        </audio>
+    </div>
+
+    <style>
+        @keyframes pulse-bg {
+            from {
+                background: rgba(255, 0, 0, 0.1);
+            }
+
+            to {
+                background: rgba(255, 0, 0, 0.3);
+            }
+        }
+
+        @keyframes pulse-text {
+            from {
+                transform: translateZ(50px) scale(1);
+            }
+
+            to {
+                transform: translateZ(50px) scale(1.1);
+            }
+        }
+    </style>
+
+    <script src="script.js"></script>
+</body>
+
+</html>
